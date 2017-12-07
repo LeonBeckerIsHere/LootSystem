@@ -4,7 +4,13 @@ GOAL:
 1) Create an elementary loot system
 
 Concept:
-    Chance for an item to drop:
+    
+    This loot system will be based off of Path of Exile's item classifications
+    Some logic concepts come from Paul Hellquist's article "INSIDE THE BOX: THE BORDERLANDS 2 LOOT SYSTEM"
+    url: http://www.gearboxsoftware.com/2013/09/inside-the-box-the-borderlands-2-loot-system/
+    
+    CHANCE_FOR_ITEM_DROP:
+    
         From a value from 0 to 1, if the value is less than 0.085
         then an item is dropped
 
