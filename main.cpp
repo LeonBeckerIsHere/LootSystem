@@ -7,7 +7,7 @@
 #include <time.h>
 #include "Pool.h"
 
-
+//disgusting method prototypes
 const std::string determine_drop(const int &int_mf, const std::vector<std::vector<Pool>> &pools);
 const std::string determine_from_pool(const int &int_mf, const int &total, const std::vector<Pool> &pool);
 void populate_pools(std::vector<std::vector<Pool>> &pools);
@@ -19,12 +19,20 @@ void populate_ACCESSORY(std::vector<Pool> &pool);
 
 int main(int argc, char** argv){
     
+    //Container to hold all the pools
     std::vector<std::vector<Pool>> standardPool(5);
+    
+    //populate the pools
     populate_pools(standardPool); 
     
+    //magic find/value based on the type of enemy killed
+    //Ideally this value is given by a client program
     int magic_find = 1;
-
+    
+    //Seed the rand function
     srand(time(NULL));
+
+    //determine 100 drops
     std::string drop;
     for(int i = 0; i < 100; i++){
         drop = determine_drop(magic_find, standardPool);
@@ -33,12 +41,15 @@ int main(int argc, char** argv){
 }
 
 const std::string determine_drop(const int &int_mf, const std::vector<std::vector<Pool>> &pools){
+    
+    //initialize variables
     std::string item_type, rarity;
     
+    //determine item type and rarity from initial pools 
     item_type = determine_from_pool(int_mf, ITEM::TOTAL,pools.at(0));
-    
     rarity = determine_from_pool(int_mf, RARITY::TOTAL, pools.at(1));
-
+    
+    //determine item type from more detailed pools
     if(item_type == "WEAPON")
         item_type = determine_from_pool(int_mf, WEAPON::TOTAL, pools.at(2));
     else if(item_type == "ARMOUR")
@@ -46,12 +57,18 @@ const std::string determine_drop(const int &int_mf, const std::vector<std::vecto
     else if(item_type == "ACCESSORY")
         item_type = determine_from_pool(int_mf, ACCESSORY::TOTAL, pools.at(4));
 
+    //return rarity and item type
     return rarity + " " + item_type;
 }
 
+//This method uses a lottery system to determine the item from a pool
 const std::string determine_from_pool(const int &int_mf, const int &total,const std::vector<Pool> &pool){
+    //draw determines the winning ticket number
     int sum = 0, draw = rand() % total + int_mf;
-
+    
+    //for each element in the pool add their ticket value
+    //to the sum. If the sum is less than the drawn ticket
+    //then we have our winner
     for(unsigned int i = 0; i < pool.size(); i++){  
         sum += pool.at(i).tickets;
         if(sum >= draw){
@@ -62,7 +79,7 @@ const std::string determine_from_pool(const int &int_mf, const int &total,const 
     return "";
 }
 
-
+//populate all the pools
 void populate_pools(std::vector<std::vector<Pool>> &pools){
     populate_ITEM(pools.at(0));
     populate_RARITY(pools.at(1));
